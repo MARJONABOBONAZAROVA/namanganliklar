@@ -2,55 +2,64 @@
 @section('content')
 
 <!-- Table Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h6 class="mb-4">Responsive Table</h6>
+         <div class="container-fluid pt-4 px-4">
+            @if($message = Session::get('success'))
+               <div class="alert alert-primary" role="alert">
+                  {{ $message }}
+               </div>
+    @endif
+            <div class="row g-4">
+              <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                  <h6 class="mb-4">Kategoriyalar</h6>
+                  <div class="d-flex justify-content-end m-3">
+                    @can('create category')
+                    <a href="{{ route('admin.categories.create') }}"><button type="button" class="btn btn-primary m-2"><ion-icon style="font-size: 20px;"2 name="create-outline"></ion-icon>Yaratish</button></a>
+                    @endcan
+                 </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Country</th>
-                                <th scope="col">ZIP</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Nomi uz</th>
+                                <th scope="col">Nomi ru</th>
+                                <th scope="col">Action</th>
+
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($categories as $item )
+
                             <tr>
-                                <th scope="row">1</th>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>jhon@email.com</td>
-                                <td>USA</td>
-                                <td>123</td>
-                                <td>Member</td>
+                                <th scope="row">{{ ++$loop->index}}</th>
+                                <td>{{ $item->name_uz}}</td>
+                                <td>{{ $item->name_ru}}</td>
+                                <td>
+                                    <form method="POST" action="{{route('admin.categories.destroy', $item->id) }}">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <a class="btn btn-primary" href="{{ route('admin.categories.show', $item->id) }}"><ion-icon name="eye-outline"></ion-icon></a>
+
+                                        @can('edit category')
+                                        <a class="btn btn-primary" href="{{ route('admin.categories.edit', $item->id) }}"><ion-icon name="create-outline"></ion-icon></a>
+                                        @endcan
+
+
+                                        @can('delete category')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Haqiqatdan ham ôchirmoqchimisiz ?')"><ion-icon name="trash-outline"></ion-icon></button>
+                                         @endcan
+
+                                    </form>
+                                </td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>mark@email.com</td>
-                                <td>UK</td>
-                                <td>456</td>
-                                <td>Member</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>jacob@email.com</td>
-                                <td>AU</td>
-                                <td>789</td>
-                                <td>Member</td>
-                            </tr>
+                            @endforeach
+
+
                         </tbody>
                     </table>
+                    {{ $categories->links() }}
                 </div>
             </div>
         </div>

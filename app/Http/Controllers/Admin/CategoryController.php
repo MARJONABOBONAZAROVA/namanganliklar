@@ -4,18 +4,29 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Repositories\Interfaces\CategoryInterface;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public $categoryInterface;
+    public  function __construct(CategoryInterface $categoryInterface)
+    {
+        $this->categoryInterface = $categoryInterface;
+       /*  $this->middleware(['permission:create category'])->only(['create','store']);
+        $this->middleware(['permission:edit category'])->only(['edit','update']);
+        $this->middleware(['permission:delete category'])->only(['destroy']); */
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
+
     {
-        return view('admin.categories.index');
+        $categories = $this->categoryInterface->getAllCategory();
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -25,7 +36,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -36,7 +47,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Category::create($request->all());
+
+        return redirect()->route('admin.categories.index')->with('Success', 'Qôshildi !');
     }
 
     /**
@@ -83,4 +96,6 @@ class CategoryController extends Controller
     {
         //
     }
+
+
 }

@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cotegories', function (Blueprint $table) {
+        Schema::create('phones', function (Blueprint $table) {
             $table->id();
-            $table->string('name_uz')->nullable();
-            $table->string('name_ru')->nullable();
+            $table->id('name');
+            $table->id('price');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cotegories');
+        Schema::dropIfExists('phones');
     }
 };
